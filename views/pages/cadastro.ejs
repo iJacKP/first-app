@@ -1,37 +1,19 @@
 <%- contentFor( 'body') %>
 
-
-    <h3 style="margin: 20px; text-align: center;">Lista dos novos usuários cadastrados no sistema.</h3>
-    <div class="add-form" class="hidden">
-        <label for="userName" class="hidden">Nome</label>
-        <input type="text" id="userName" placeholder="Nome sobrenome" class="hidden">
-        <label for="userEmail" class="hidden">Email</label>
-        <input type="email" id="userEmail" placeholder="Email@dominio.com" class="hidden">
-        <label for="userAddress" class="hidden">Endereço</label>
-        <input type="text" id="userAddress" placeholder="Rua, numero" class="hidden">
-        <label for="userAge" class="hidden">Idade</label>
-        <input type="number" id="userAge" min="1" placeholder="Idade" class="hidden">
-        <label for="userHeight" class="hidden">Altura (metros)</label>
-        <input type="number" id="userHeight" placeholder="Altura" class="hidden" min="1" step="0.01">
-        <label for="userVote" class="hidden">Vota?</label>
-        <input type="checkbox" id="userVote" placeholder="Vota" class="hidden">
-    </div>
-    <div class="add-form-buttons" class="hidden">
-        <a href="#" onclick="addUser()" class="hidden" id="add-form-submit">Adicionar</a>
-        <a href="#" onclick="hideAddUserForm()" class="hidden" id="add-form-cancel">Cancelar</a>
-    </div>
-    <a href="#" onclick="showAddUserForm()" id="add-form-call">Adicionar novo usuário</a>
-
-    <table class="table table-hover">
-        <thead>
-        <tr>
+<div class="table-responsive-xl ">
+    <h2 style='text-align: center;'>Usuários Cadastrados</h2>
+    <p style='text-align: center;'>Lista de usuários Cadastrados no sistema.</p>            
+    <table class="table table-hover bg-light" id="list">
+        <thead style='background-color:black;'>
+        <tr style='color: white'>
             <th>Nome</th>
             <th>Email</th>
             <th>Endereço</th>
             <th>Idade</th>
             <th>Altura</th>
             <th>Vota?</th>
-            <th>Ação</th>
+            <th>Editar</th>
+            <th>Remover</th>
         </tr>
         </thead>
         <tbody>
@@ -40,69 +22,87 @@
             <% let linkRemove="/cadastro/remove/"; %>
             <% let linkUpdate="/cadastro/update/"; %>
 
-            <% for(let index=0;index < users.length;index++){ %>
-                <tr>
+            <% if(users.length >0){%>
+                <% for(let index=0;index<users.length;index++){ %>
+                    <tr data-index-row="<%= index %>">
+                        
+                    <td data-index-row="<%=index%>">
+                        <span  class="show"><%= users[index].name %></span>
+                        <input type="text" name="name"  class="hidden" value="<%= users[index].name %>">
+                    </td>
+                    <td data-index-row="<%=index%>">
+                        <span  class="show"><%= users[index].email %></span>
+                        <input type="text" name="email"  class="hidden" value="<%= users[index].email %>">
+                    </td>
+                    <td data-index-row="<%=index%>">
+                        <span  class="show"><%= users[index].address %></span>
+                        <input type="text" name="address"  class="hidden" value="<%= users[index].address %>">
+                    </td>
+                    <td data-index-row="<%=index%>">
+                        <span  class="show"><%= users[index].age %></span>
+                        <input type="text" name="age"  class="hidden" value="<%= users[index].age %>">
+                        
+                    </td>
+                    <td data-index-row="<%=index%>">
+                        <span  class="show"><%= users[index].heigth %></span>
+                        <input type="text" name="heigth"  class="hidden" value="<%= users[index].heigth %>">
+                        
+                    </td>
+                    <td data-index-row="<%=index%>">
+                        <span  class="show"><%= users[index].vote %></span>
+                        <input type="text" name="vote" class="hidden" value="<%= users[index].vote %>">
+                        
+                    </td>
+                    <td data-index-row="<%=index%>" class="hidden" data-index-row="<%=index%>">
+                        <input type="button" value="Atualizar" class="hidden" >
+                      
+                    </td>
+                    <td  data-index-row="<%= index %>">
+                        <a href="#" onclick="update('<%=index%>','<%= linkUpdate %>')" class="show"><i class="fas fa-pen"></i></a>  
+                    </td> 
                     
-                <td data-index-row="<%=index%>">
-                    <span  class="show"><%= users[index].name %></span>
-                    <input type="text" name="name"  class="hidden" value="<%= users[index].name %>">
-                </td>
-                <td data-index-row="<%=index%>">
-                    <span  class="show"><%= users[index].email %></span>
-                    <input type="text" name="email"  class="hidden" value="<%= users[index].email %>">
-                </td>
-                <td data-index-row="<%=index%>">
-                    <span  class="show"><%= users[index].address %></span>
-                    <input type="text" name="address"  class="hidden" value="<%= users[index].address %>">
-                </td>
-                <td data-index-row="<%=index%>">
-                    <span  class="show"><%= users[index].age %></span>
-                    <input type="text" name="age"  class="hidden" value="<%= users[index].age %>">
-                    
-                </td>
-                <td data-index-row="<%=index%>">
-                    <span  class="show"><%= users[index].height %></span>
-                    <input type="text" name="height"  class="hidden" value="<%= users[index].height %>">
-                    
-                </td>
-                <td data-index-row="<%=index%>">
-                    <span  class="show"><%= users[index].vote %></span>
-                    <input type="text" name="vote" class="hidden" value="<%= users[index].vote %>">
-                    
-                </td>
-                <td data-index-row="<%=index%>" class="hidden" data-index-row="<%=index%>"><input type="button" value="Atualizar" class="hidden" ></td>
-
-
-               
-                <td  data-index-row="<%= index %>">
-                    <a href="#" onclick="update('<%=index%>','<%= linkUpdate %>')" class="show"><i class="fas fa-pen"></i></a>  
-                </td> 
-                
-                <td  data-index-row="<%= index %>">
-                    <a href="#" class="show" onclick="remove('<%=index %>','<%=linkRemove%>')"><i class="fas fa-trash-alt"></i></a>
-                </td>
-
-                </tr>
-            <% } %>
-
+                  
+                    <td  data-index-row="<%= index %>">
+                   
+                        <a href="#" class="show" onclick="remove('<%=index %>','<%=users[index].name %>','<%=linkRemove%>')"><i class="fas fa-trash-alt"></i></a>
+                    </td>
+                    </tr>
+                <% } //for %>
+            <% }else{%>
+                <tr><td colspan="7"><p class="text-black">Nenhum dado cadastrado</p></td></tr>
+            <%} //If-Else %>   
         </tbody>
     </table>
-
-    <div" class="list-header">
-        <h2>Todos os usuários</h2>
-        <a href="#" onclick="list()" id="list-call">Mostrar lista</a>
-    </div>
-    <table class="table table-hover hidden" id="list">
-        <thead>
-        <tr>
-            <th>Nome</th>
-            <th>Email</th>
-            <th>Endereço</th>
-            <th>Altura</th>
-            <th>Idade</th>
-            <th>Vota?</th>
-        </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
+    <h2 style='background-color: black; border-radius: 5px; color: whitesmoke; text-align: center; margin: 100px 0px 40px 0px; padding: 10px 0px 10px 0px'>Cadastrar Usuário</h2>
+   
+         <form name='cadastro' action='#'>
+        <div class="form-group">
+            <label for="_name">Nome:</label>
+            <input type="text" name="_name" id="_name" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="_email">E-mail:</label>
+            <input type="text" name="_email" id="_email" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="_address">Endereço:</label>
+            <input type="text" name="_address" id="_address" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="_heigth">Altura:</label>
+            <input type="text" name="_height" id="_height" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="_age">Idade:</label>
+            <input type="text" name="_age" id="_age" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="_vote">Votou:</label>
+            <input type="text" name="_vote" id="_vote" class="form-control">
+        </div>
+        <div class="form-group">
+            <input type="button" onclick="add('_name','_email','_address','_height','_age', '_vote','/cadastro/add/')" value="Cadastrar" class="btn btn-success">
+        </div>
+    </form>
+    
+</div>
